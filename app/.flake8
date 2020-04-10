@@ -1,0 +1,9 @@
+[flake8]
+exclude =
+    .git,
+    __pycache__,
+    ./app/app/settings.py,
+    ./app/settings.py,
+    .vscode,
+    venv,
+    migrations

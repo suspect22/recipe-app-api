@@ -120,3 +120,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# Overwriting the default user Model with the customized Model
+AUTH_USER_MODEL = 'core.user'
