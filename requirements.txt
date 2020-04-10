@@ -2,3 +2,4 @@ django
 djangorestframework
 flake8
 docutils
+psycopg2

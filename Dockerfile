@@ -8,9 +8,13 @@ ENV PROJECTSOURCE ./app/
 ENV EXPOSEPORT 8000
 
 COPY ./requirements.txt /requirements.txt
-RUN pip install -r /requirements.txt \
+RUN apk add --update --no-cache postgresql-client \ 
+    && apk add --update --nocache --virtual .tmp-build-deps \
+        gcc libc-dev linux-headers postgresql-dev \
+    && pip install -r /requirements.txt \
     && mkdir ${PROJECTPATH} \
-    && adduser -D ${PYTHONUSER}
+    && adduser -D ${PYTHONUSER} \
+    && apk del .tmp-build-deps
 WORKDIR ${PROJECTPATH}
 COPY ${PROJECTSOURCE} ${PROJECTPATH}
 
