@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.admindocs',
     'rest_framework',
-    'core'
+    'rest_framework.authtoken',
+    'core',
+    'user'
 ]
 
 MIDDLEWARE = [
@@ -128,3 +130,10 @@ STATIC_URL = '/static/'
 
 # Overwriting the default user Model with the customized Model
 AUTH_USER_MODEL = 'core.user'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ]
+}
