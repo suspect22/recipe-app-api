@@ -12,6 +12,7 @@ from recipe.serializers import IngredientSerializer
 
 INGREDIENTS_URL = reverse('recipe:ingredient-list')
 
+
 class PublicIngredientsApiTests(TestCase):
     """Tests publicly available api Actions for Ingredients"""
 
@@ -23,6 +24,7 @@ class PublicIngredientsApiTests(TestCase):
         response = self.client.get(INGREDIENTS_URL)
 
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
 
 class PrivateIngredientsApiTests(TestCase):
     """Test available api Actions for authenticated Users"""
@@ -54,10 +56,35 @@ class PrivateIngredientsApiTests(TestCase):
             password="Password123",
         )
         Ingredient.objects.create(user=user2, name='Cucumber')
-        ingredient = Ingredient.objects.create(user=self.user, name='Swordfish')
+        ingredient = Ingredient.objects.create(
+            user=self.user,
+            name='Swordfish'
+        )
 
         response = self.client.get(INGREDIENTS_URL)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(response.data),1)
+        self.assertEqual(len(response.data), 1)
         self.assertEqual(response.data[0]['name'], ingredient.name)
+
+    def test_create_ingredients_successful(self):
+        """Test that ingredients can be created"""
+        payload = {
+            'name': "Swordfish",
+        }
+        self.client.post(INGREDIENTS_URL, payload)
+
+        exists = Ingredient.objects.filter(
+            user=self.user,
+            name=payload['name'],
+        ).exists()
+        self.assertTrue(exists)
+
+    def test_create_ingredients_invalid(self):
+        """Test that empty name creation is not possible"""
+        payload = {
+            'name': "",
+        }
+        response = self.client.post(INGREDIENTS_URL, payload)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
