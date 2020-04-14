@@ -3,3 +3,4 @@ djangorestframework
 flake8
 docutils
 psycopg2
+Pillow

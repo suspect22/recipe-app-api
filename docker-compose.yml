@@ -9,8 +9,9 @@ services:
    volumes:
      - ./app:/app
    command: >
-      sh -c "python manage.py wait_for_db && 
-             python manage.py migrate &&
+      sh -c "./wait-for-postgres.sh db:5432 && \
+             python manage.py wait_for_db && \
+             python manage.py migrate && \
              python manage.py runserver 0.0.0.0:8000"
    environment:
       - DB_HOST=db
@@ -18,8 +19,6 @@ services:
       - DB_USER=${DB_USER}
       - DB_PASS=${DB_PASSWORD}
    depends_on:
-      - db
-   links:
       - "db"
 
  db:
